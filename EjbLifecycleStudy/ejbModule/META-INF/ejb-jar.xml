@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+> EJB 2.x: the EJB must be deployed in a JAR file and the ejb-jar.xml must go in META-INF directory;
+> EJB 3.x: also can be deployed in a .WAR file and the ejb-jar.xml must go in WEB-INF directory.
+-->
+<!-- EJB 2.x -->
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar id="ejb-jar_ID"> 
+
+<!-- EJB 3.x
+<ejb-jar version="3.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd"> -->
+	
+	<display-name>Ejb2 Lifecycle Study</display-name>
+
+	<enterprise-beans>
+		<!-- EJB 2.x -->
+		<session>
+			<display-name>EJB 2 Stateful</display-name>
+			<ejb-name>Ejb2StatefulCreation</ejb-name>
+			<home>study.ejb2.lifecycle.stateful.EjbStatefulHome</home>
+			<remote>study.ejb2.lifecycle.stateful.EjbStatefulComponent</remote>
+			<ejb-class>study.ejb2.lifecycle.stateful.EjbStatefulBean</ejb-class>
+			<session-type>Stateful</session-type>
+			<transaction-type>Bean</transaction-type>
+			<security-identity>
+				<description></description>
+				<use-caller-identity />
+			</security-identity>
+		</session>
+		
+		<session>
+			<display-name>EJB 2 Stateless</display-name>
+			<ejb-name>Ejb2StatelessCreation</ejb-name>
+			<home>study.ejb2.lifecycle.stateless.EjbStatelessHome</home>
+			<remote>study.ejb2.lifecycle.stateless.EjbStatelessComponent</remote>
+			<ejb-class>study.ejb2.lifecycle.stateless.EjbStatelessBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Bean</transaction-type>
+			<security-identity>
+				<description>Default role security of the caller (either a client or another bean)</description>
+				<use-caller-identity />
+			</security-identity>
+		</session>
+		
+		<entity>
+			<description>EJB 2 Entity Bean</description>
+			<ejb-name>Ejb2EntityPerson</ejb-name>
+			<home>study.ejb2.lifecycle.entity.EjbEntityHome</home>
+			<remote>study.ejb2.lifecycle.entity.EjbEntityComponent</remote>
+			<ejb-class>study.ejb2.lifecycle.entity.EjbEntityBean</ejb-class>
+			<!-- in Entity Bean transaction-type can be only Container -->
+			<persistence-type>Container</persistence-type>
+			<prim-key-class>java.lang.String</prim-key-class>
+			<reentrant>false</reentrant>
+			<!-- this version is used to allows the Container implement our abstract things -->
+			<cmp-version>2.x</cmp-version>
+			<!-- name of the schema - must be unique -->
+			<abstract-schema-name>PERSON</abstract-schema-name>
+			<!-- field for CMP entity bean - must match the field of the schema -->
+			<cmp-field>
+				<field-name>id</field-name>
+			</cmp-field>
+			<cmp-field>
+				<field-name>nameField</field-name>
+			</cmp-field>
+			<cmp-field>
+				<field-name>ageField</field-name>
+			</cmp-field>
+			<!-- the field of relationship is declared only in ejb-relationship-role -->
+			<primkey-field>id</primkey-field>
+			<security-identity>
+				<description></description>
+				<use-caller-identity />
+			</security-identity>
+			<!-- queries to ejbSelect methods, thus the Container will know how to select -->
+			<query>
+				<query-method>
+					<method-name>ejbSelectGellAllByDoc</method-name>
+					<method-params>
+						<method-param>java.lang.String</method-param>
+						<method-param>java.lang.String</method-param>
+					</method-params>
+				</query-method>
+				<ejb-ql>SELECT OBJECT(p) FROM PERSON p, IN(p.docsField) d WHERE d.descriptionField = ?1 AND d.valueField = ?2</ejb-ql>
+			</query>
+		</entity>
+		
+		<entity>
+			<description>EJB 2 Entity Bean to Relationship</description>
+			<ejb-name>Ejb2EntityDoc</ejb-name>
+			<local-home>study.ejb2.lifecycle.entity.EjbEntityRelationshipHome</local-home>
+			<local>study.ejb2.lifecycle.entity.EjbEntityRelationshipComponent</local>
+			<ejb-class>study.ejb2.lifecycle.entity.EjbEntityRelationshipBean</ejb-class>
+			<persistence-type>Container</persistence-type>
+			<prim-key-class>java.lang.String</prim-key-class>
+			<reentrant>false</reentrant>
+			<!-- this version is used to allows the Container implement our abstract things -->
+			<cmp-version>2.x</cmp-version>
+			<!-- name of the schema - must be unique -->
+			<abstract-schema-name>DOC</abstract-schema-name>
+			<!-- field for CMP entity bean - must match the field of the schema -->
+			<cmp-field>
+				<field-name>id</field-name>
+			</cmp-field>
+			<cmp-field>
+				<field-name>descriptionField</field-name>
+			</cmp-field>
+			<cmp-field>
+				<field-name>valueField</field-name>
+			</cmp-field>
+			<!-- the field of relationship is declared only in ejb-relationship-role -->
+			<primkey-field>id</primkey-field>
+			<security-identity>
+				<description></description>
+				<use-caller-identity />
+			</security-identity>
+			<!-- queries to ejbSelect methods, thus the Container will know how to select -->
+			<query>
+				<query-method>
+					<method-name>ejbSelectGetAllDocsByPerson</method-name>
+					<method-params>
+						<method-param>java.lang.String</method-param>
+					</method-params>
+				</query-method>
+				<ejb-ql>SELECT OBJECT(d) FROM DOC d WHERE d.person = ?1</ejb-ql>
+			</query>
+		</entity>
+		
+		<message-driven>
+			<ejb-name>EJB2MessageDrivenBean</ejb-name>
+			<ejb-class>study.ejb2.lifecycle.messagedriven.EjbMessageDrivenBean</ejb-class>
+			<transaction-type>Container</transaction-type>
+			<!-- how many will consume the message: Queue (only one bean of any type will consume) or
+			 Topic (one bean of each type whose is listening the event will consume) -->
+			<message-driven-destination>
+				<destination-type>javax.jms.Topic</destination-type>
+			</message-driven-destination>
+		</message-driven>
+		
+		<session>
+			<display-name>EJB 2 Price Calculator</display-name>
+			<ejb-name>Ejb2PriceCalculator</ejb-name>
+			<local-home>study.ejb2.environmententries.stateless.EjbPriceCalculatorHome</local-home>
+			<local>study.ejb2.environmententries.stateless.EjbPriceCalculatorComponent</local>
+			<ejb-class>study.ejb2.environmententries.stateless.EjbPriceCalculatorBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			
+			<!-- environment entries - deploy-time constants
+			It's per bean home (private and unique) - all beans of the same type will have the same values -->
+			<env-entry>
+				<description>percentage discount for products</description>
+				<!-- JNDI - made up name to lookup in the bean concatenated with "java:comp/env/" -->
+				<env-entry-name>percDiscount</env-entry-name>
+				<!-- the type must be either a String or a wrapper class -->
+				<env-entry-type>java.lang.Double</env-entry-type>
+				<env-entry-value>30.0</env-entry-value>
+			</env-entry>
+			<env-entry>
+				<description>max discount for products</description>
+				<env-entry-name>maxDiscount</env-entry-name>
+				<env-entry-type>java.lang.Double</env-entry-type>
+				<env-entry-value>1600.00</env-entry-value>
+			</env-entry>
+			
+			<!-- EJB references -->
+			<ejb-ref>
+				<!-- JNDI made up name (used in the code to look up) -->
+				<ejb-ref-name>ejb/EjbCustomerFinder</ejb-ref-name>
+				<!-- EJB type: Session or Entity -->
+				<ejb-ref-type>Session</ejb-ref-type>
+				<home>com.virtualecommerce.ejb.CustomerFinderHome</home>
+				<remote>com.virtualecommerce.ejb.CustomerFinder</remote>
+			</ejb-ref>
+			<ejb-local-ref>
+				<!-- made-up JNDI name (used in the code to look up) -->
+				<ejb-ref-name>ejb/EjbProductFinder</ejb-ref-name>
+				<!-- EJB type: Session or Entity -->
+				<ejb-ref-type>Session</ejb-ref-type>
+				<local-home>com.virtualecommerce.ejb.ProductFinderHome</local-home>
+				<local>com.virtualecommerce.ejb.ProductFinder</local>
+				<!-- Used to link another EJB declared in the DD
+				<ejb-link>Ejb2StatefulCreation</ejb-link> -->
+			</ejb-local-ref>
+			
+			<!-- resource references -->
+			<resource-ref>
+				<!-- made-up JNDI name (used in the code to look up) -->
+				<res-ref-name>jdbc/ProductDB</res-ref-name>
+				<!-- the resource manager connection factory type, used to get:
+				DataSource, JMS QueueConnectionFactory or TopicConnectionFactory, Mail Session, Net URL, ... -->
+				<res-type>javax.sql.DataSource</res-type>
+				<!-- who checks to see if the use has the right security access for the database: if is set
+				Container the deployer will setup the user and password, if is set Bean means the Bean Provider
+				is using getConnection(String userName, String password) to get the connections -->
+				<res-auth>Container</res-auth>
+				<!-- optional and default is Shareable
+				specifies if a connection get from this DataSource can be shared, will be shared if the
+				other bean is in the same app, using the same resource and in the same transaction (it's
+				important because if we have an atomic operation [like order and products] in multiples beans
+				using more than one operation JDBC we can rollback everything correctly). -->
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+			
+			<!-- resource environment references -->
+			<resource-env-ref>
+				<description>The Queue to process notifications about product</description>
+				<!-- made-up JNDI name (used in the code to look up) -->
+				<resource-env-ref-name>jms/NotificationProductArrive</resource-env-ref-name>
+				<resource-env-ref-type>javax.jms.Queue</resource-env-ref-type>
+			</resource-env-ref>
+		</session>
+		
+		
+		<!-- EJB 3.x 
+		<session>
+			<ejb-name>Ejb3StatelessBean</ejb-name>
+			<ejb-class>study.ejb3.lifecycle.stateless.EjbStatelessBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<env-entry>
+				<description>This entry will be injected through @Resource annotation</description>
+				<env-entry-name>maxDiscount</env-entry-name>
+				<env-entry-type>java.lang.Double</env-entry-type>
+				<env-entry-value>1600.00</env-entry-value>
+			</env-entry>
+		</session> -->
+	</enterprise-beans>
+
+
+	<!-- relationship between beans -->
+	<relationships>
+		<!-- each ejb-relation must have exactly 2 beans -->
+		<ejb-relation>
+			<!-- relationship role to Ejb2EntityPerson -->
+			<ejb-relationship-role>
+				<ejb-relationship-role-name>OthersToEntityPerson</ejb-relationship-role-name>
+				<multiplicity>One</multiplicity>
+				<relationship-role-source>
+					<ejb-name>Ejb2EntityPerson</ejb-name>
+				</relationship-role-source>
+				<!-- the field of relationship - must match the abstract getter and setter -->
+				<cmr-field>
+					<cmr-field-name>docsField</cmr-field-name>
+					<cmr-field-type>java.util.Collection</cmr-field-type>
+				</cmr-field>
+			</ejb-relationship-role>
+
+			<!-- relationship role to Ejb2EntityDoc -->
+			<ejb-relationship-role>
+				<ejb-relationship-role-name>OthersToEntityDoc</ejb-relationship-role-name>
+				<multiplicity>Many</multiplicity>
+				<cascade-delete />
+				<relationship-role-source>
+					<ejb-name>Ejb2EntityDoc</ejb-name>
+				</relationship-role-source>
+				<!-- the cmr-field is not required because the relationship can be unidirectional (Person -> Doc) -->
+				<cmr-field>
+					<cmr-field-name>person</cmr-field-name>
+				</cmr-field>
+			</ejb-relationship-role>
+		</ejb-relation>
+	</relationships>
+	
+	<!-- EJB 3.1 
+	Default interceptors used in all beans
+	<assembly-descriptor>
+	    <interceptor-binding>
+	        <ejb-name>*</ejb-name>
+			<interceptor-class>study.ejb3.interceptors.EjbMethodInterceptor</interceptor-class>
+	    </interceptor-binding>
+	</assembly-descriptor>
+	 -->
+</ejb-jar>

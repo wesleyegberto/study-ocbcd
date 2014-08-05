@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+<ejb-jar id="ejb-jar_ID">
+	<display-name>EjbTransactionStudy</display-name>
+	
+	<enterprise-beans>
+		<!-- BMT -->
+		<session>
+			<display-name>EJB2 Stateless BMT</display-name>
+			<ejb-name>EJB2StatelessBMT</ejb-name>
+			<local-home>study.ejb2.transaction.bmt.stateless.EjbStatelessDiceHome</local-home>
+			<local>study.ejb2.transaction.bmt.stateless.EjbStatelessDice</local>
+			<ejb-class>study.ejb2.transaction.bmt.stateless.EjbStatelessDiceBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<!-- BMT bean must declare "Bean" -->
+			<transaction-type>Bean</transaction-type>
+			<security-identity>
+				<description></description>
+				<use-caller-identity />
+			</security-identity>
+		</session>
+		<session>
+			<display-name>EJB2 Stateful BMT</display-name>
+			<ejb-name>EJB2StatefulBMT</ejb-name>
+			<local-home>study.ejb2.transaction.bmt.stateful.EjbStatefulOrderProcessHome</local-home>
+			<local>study.ejb2.transaction.bmt.stateful.EjbStatefulOrderProcess</local>
+			<ejb-class>study.ejb2.transaction.bmt.stateful.EjbStatefulOrderProcessBean</ejb-class>
+			<session-type>Stateful</session-type>
+			<!-- BMT bean must declare "Bean" -->
+			<transaction-type>Bean</transaction-type>
+			<security-identity>
+				<description></description>
+				<use-caller-identity /> 
+			</security-identity>
+		</session>
+		
+		<!-- CMT -->
+		<session>
+			<display-name>EJB2 Stateless CMT</display-name>
+			<ejb-name>EJB2StatelessCMT</ejb-name>
+			<local-home>study.ejb2.transaction.cmt.stateless.EjbStatelessDiceHome</local-home>
+			<local>study.ejb2.transaction.cmt.stateless.EjbStatelessDice</local>
+			<ejb-class>study.ejb2.transaction.cmt.stateless.EjbStatelessDiceBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<!-- CMT bean must declare "Container" -->
+			<transaction-type>Container</transaction-type>
+			<security-identity>
+				<description></description>
+				<use-caller-identity />
+			</security-identity>
+		</session>
+		<session>
+			<display-name>EJB2 Stateful CMT</display-name>
+			<ejb-name>EJB2StatefulCMT</ejb-name>
+			<local-home>study.ejb2.transaction.cmt.stateful.EjbStatefulDiceHome</local-home>
+			<local>study.ejb2.transaction.cmt.stateful.EjbStatefulDice</local>
+			<ejb-class>study.ejb2.transaction.cmt.stateful.EjbStatefulDiceBean</ejb-class>
+			<session-type>Stateful</session-type>
+			<!-- CMT bean must declare "Container" -->
+			<transaction-type>Container</transaction-type>
+			<security-identity>
+				<description></description>
+				<use-caller-identity />
+			</security-identity>
+		</session>
+	</enterprise-beans>
+	
+	<!-- used in CMT -->
+	<assembly-descriptor>
+		<container-transaction>
+			<method>
+				<ejb-name>EJB2StatelessCMT</ejb-name>
+				<method-name>rollDiceInAcid</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		<container-transaction>
+			<method>
+				<ejb-name>EJB2StatefulCMT</ejb-name>
+				<method-name>rollDiceInAcid</method-name>
+			</method>
+			<trans-attribute>RequiredNew</trans-attribute>
+		</container-transaction>
+	</assembly-descriptor>
+</ejb-jar>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar id="ejb-jar_ID">
+	<display-name>Ejb2Advice</display-name>
+	
+	<enterprise-beans>
+		<session>
+			<display-name>AdviceBean</display-name>
+			<ejb-name>AdviceBean</ejb-name>
+			<home>capintro.AdviceHome</home>
+			<remote>capintro.Advice</remote>
+			<ejb-class>capintro.AdviceBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Bean</transaction-type>
+			<security-identity>
+				<description></description>
+				<use-caller-identity/>
+			</security-identity>
+		</session>
+	</enterprise-beans>
+</ejb-jar>

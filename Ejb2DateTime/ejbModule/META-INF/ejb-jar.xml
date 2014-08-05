@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+<ejb-jar id="ejb-jar_ID">
+	<display-name>Ejb2DateTime</display-name>
+	
+	<enterprise-beans>
+		<session>
+			<display-name>DateTimeBean</display-name>
+			<ejb-name>DateTimeBean</ejb-name>
+			<!-- remote interfaces -->
+			<home>test.ejb.datetime.DateTimeHome</home>
+			<remote>test.ejb.datetime.DateTime</remote>
+			<!-- local interfaces -->
+			<local-home>test.ejb.datetime.DateTimeLocalHome</local-home>
+			<local>test.ejb.datetime.DateTimeLocal</local>
+			
+			<ejb-class>test.ejb.datetime.DateTimeBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Bean</transaction-type>
+			<security-identity>
+				<description></description>
+				<use-caller-identity/>
+			</security-identity>
+		</session>
+	</enterprise-beans>
+</ejb-jar>

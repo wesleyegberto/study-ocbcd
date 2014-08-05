@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+<ejb-jar id="ejb-jar_ID">
+	<display-name>EjbSecurityStudy</display-name>
+	
+	<!-- EJBs -->
+	<enterprise-beans>
+		<session>
+			<display-name>EJB2 Security Account</display-name>
+			<ejb-name>Ejb2SecurityAccount</ejb-name>
+			<local-home>study.ejb2.security.ejbs.AccountHome</local-home>
+			<local>study.ejb2.security.ejbs.AccountComponent</local>
+			<ejb-class>study.ejb2.security.ejbs.AccountBean</ejb-class>
+			<session-type>Stateful</session-type>
+			<transaction-type>Container</transaction-type>
+			<security-role-ref>
+				<description>Role to customers</description>
+				<!-- role references: used in EJB and hard-coded (used int isCallerInRole method) -->
+				<role-name>EjbRoleCustomer</role-name>
+				<!-- real role name: used to link the role used by Bean Provider to real role of the App Assembler -->
+				<role-link>Customer</role-link>
+			</security-role-ref>
+			<security-identity>
+				<!-- will use a identity with this role-name (declared in assembly-descriptor section)
+				instead of the calling client's identity.
+				<run-as>
+					<role-name>Manager</role-name>
+				</run-as> -->
+				<!-- will use the calling client's identity (must not be used with MDB), this is default -->
+				<use-caller-identity/>
+			</security-identity>
+		</session>
+	</enterprise-beans>
+	
+	
+	<assembly-descriptor>
+		<!-- declarative class-level security -->
+		<!-- roles -->
+		<security-role>
+			<description>This role is for the customers who has an account.</description>
+			<role-name>Customer</role-name>
+		</security-role>
+		
+		<security-role>
+			<description>This role is for the employees who can create account.</description>
+			<role-name>Manager</role-name>
+		</security-role>
+		
+		
+		<!-- methods permissions -->
+		<method-permission>
+			<role-name>Customer</role-name>
+			<method>
+				<ejb-name>Ejb2SecurityAccount</ejb-name>
+				<method-intf>LocalHome</method-intf>
+				<method-name>create</method-name>
+				<method-params>
+					<method-param>java.lang.String</method-param>
+					<method-param>java.lang.String</method-param>
+				</method-params>
+			</method>
+			<method>
+				<ejb-name>Ejb2SecurityAccount</ejb-name>
+				<method-intf>Local</method-intf>
+				<method-name>getInformation</method-name>
+			</method>
+			<method>
+				<ejb-name>Ejb2SecurityAccount</ejb-name>
+				<method-intf>Local</method-intf>
+				<method-name>getBalance</method-name>
+			</method>
+			<method>
+				<ejb-name>Ejb2SecurityAccount</ejb-name>
+				<method-intf>Local</method-intf>
+				<method-name>withdraw</method-name>
+				<method-params>
+					<method-param>double</method-param>
+				</method-params>
+			</method>
+		</method-permission>
+		
+		<method-permission>
+			<role-name>Manager</role-name>
+			<!-- used to allow to everyone  
+			<unchecked/>
+			 -->
+			<method>
+				<ejb-name>Ejb2SecurityAccount</ejb-name>
+				<method-intf>LocalHome</method-intf>
+				<method-name>create</method-name>
+				<method-params>
+					<method-param>java.lang.String</method-param>
+					<method-param>double</method-param>
+				</method-params>
+			</method>
+			<method>
+				<ejb-name>Ejb2SecurityAccount</ejb-name>
+				<method-name>getInformation</method-name>
+			</method>
+		</method-permission>
+		
+		
+		<!-- transactions -->
+		<container-transaction>
+			<method>
+				<ejb-name>Ejb2SecurityAccount</ejb-name>
+				<method-name>withdraw</method-name>
+				<method-params>
+					<method-param>double</method-param>
+				</method-params>
+			</method>
+			<trans-attribute>Require</trans-attribute>
+		</container-transaction>
+		<container-transaction>
+			<method>
+				<ejb-name>Ejb2SecurityAccount</ejb-name>
+				<method-intf>LocalHome</method-intf>
+				<method-name>create</method-name>
+				<method-params>
+					<method-param>java.lang.String</method-param>
+					<method-param>double</method-param>
+				</method-params>
+			</method>
+			<trans-attribute>RequireNew</trans-attribute>
+		</container-transaction>
+		
+	</assembly-descriptor>
+</ejb-jar>
