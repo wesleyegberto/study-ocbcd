@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+	"http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+	
+<!--
+Notes:
+> JDK 1.3.1 and J2EE 1.3;
+> This project was tested at J2EE RI Sun Server;
+> The MySQL driver used was: mm.mysql-2.0.4 and driver MySQL for JDK 1.3;
+> To use the MDB correctly, need use a XA Data Source to allows more the one Data Source
+  (J2EE 1.3 release note section "New Treatment of Non-XA Data Transactions"), I've changed
+  the default data source with JNDI name "jdbc/Cloudscape" in the file resource.properties to be XA; 
+> To create a JMS and deploy MDB in J2EE RI:
+  1) List the existing queues and topics through the deploytool or
+  the command: j2eeadmin -listJMSDestination
+  2) Add the queue: j2eeadmin -addJMSDestination jms/depositProcess queue
+  3) Deploy the bean
+>
+ -->
+
+<ejb-jar id="EJB2-PROJECT-BANK">
+	<description>Project bank using EJB 2</description>
+	<display-name>EJB2 Project Bank</display-name>
+	
+	
+	<enterprise-beans>	
+		<session>
+			<display-name>EJB 2 Agency Bean</display-name>
+			<ejb-name>Ejb2Agency</ejb-name>
+			<home>study.projectbank.agency.ejb.AgencyFacadeHome</home>
+			<remote>study.projectbank.agency.ejb.AgencyFacade</remote>
+			<ejb-class>study.projectbank.agency.ejb.AgencyFacadeBean</ejb-class>
+			<session-type>Stateful</session-type>
+			<transaction-type>Container</transaction-type>
+			
+			<resource-ref>
+				<description>Bank Data Source</description>
+				<res-ref-name>jdbc/BankDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+			
+			<resource-ref>
+				<description>Queue Connection Factory to Deposit Process</description>
+				<res-ref-name>jms/QueueConnectionFactory</res-ref-name>
+				<res-type>javax.jms.QueueConnectionFactory</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+			
+			<resource-env-ref>
+				<description>Queue to Deposit Process</description>
+				<resource-env-ref-name>jms/depositProcess</resource-env-ref-name>
+				<resource-env-ref-type>javax.jms.Queue</resource-env-ref-type>
+			</resource-env-ref>
+		</session>
+		
+		<session>
+			<display-name>EJB 2 Account Bean</display-name>
+			<ejb-name>Ejb2Account</ejb-name>
+			<home>study.projectbank.account.ejb.AccountFacadeHome</home>
+			<remote>study.projectbank.account.ejb.AccountFacade</remote>
+			<ejb-class>study.projectbank.account.ejb.AccountFacadeBean</ejb-class>
+			<session-type>Stateful</session-type>
+			<transaction-type>Container</transaction-type>
+			
+			<env-entry>
+				<description>JNDI JMS Deposit Process</description>
+				<env-entry-name>jndiJmsDepositProcess</env-entry-name>
+				<env-entry-type>java.lang.String</env-entry-type>
+				<env-entry-value>jms/depositProcess</env-entry-value>
+			</env-entry>
+			
+			<resource-ref>
+				<description>Bank Data Source</description>
+				<res-ref-name>jdbc/BankDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+			
+			
+		</session>
+		
+		<message-driven>
+			<display-name>EJB 2 Queue Deposit Process</display-name>
+			<ejb-name>Ejb2DepositProcess</ejb-name>
+			<ejb-class>study.projectbank.process.deposit.ejb.DepositProcessBean</ejb-class>
+			<transaction-type>Container</transaction-type>
+			<message-driven-destination>
+				<destination-type>javax.jms.Queue</destination-type>
+			</message-driven-destination>
+			
+			<resource-ref>
+				<description>Bank Data Source</description>
+				<res-ref-name>jdbc/BankDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</message-driven>
+	</enterprise-beans>
+	
+	
+	
+	<assembly-descriptor>
+		<!-- roles -->
+		<security-role>
+			<description>Role to the customers of the bank.</description>
+			<role-name>Customer</role-name>
+		</security-role>
+		
+		<security-role>
+			<description>Role to the managers of the bank's agency.</description>
+			<role-name>ManagerAgency</role-name>
+		</security-role>
+		
+		
+		<!-- securities -->
+		<!-- Agency -->
+		<method-permission>
+			<description>To access Agency Facade needs to be a manager of the agency.</description>
+			<role-name>ManagerAgency</role-name>
+			<method>
+				<ejb-name>Ejb2Agency</ejb-name>
+				<method-name>*</method-name>
+			</method>
+		</method-permission>
+		
+		<!-- Account -->
+		<method-permission>
+			<role-name>Customer</role-name>
+			<method>
+				<ejb-name>Ejb2Account</ejb-name>
+				<method-intf>Remote</method-intf>
+				<method-name>*</method-name>
+			</method>
+		</method-permission>
+		
+		
+		<!-- Transactions -->
+		<!-- Creator DB -->
+		<container-transaction>
+			<description>All methods from EJB Creator DB.</description>
+			<method>
+				<ejb-name>Ejb2CreatorDB</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<!-- Agency -->
+		<container-transaction>
+			<description>All methods from EJB Agency should be ACID.</description>
+			<method>
+				<ejb-name>Ejb2Agency</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<!-- Account -->
+		<container-transaction>
+			<description>The create method from Home need a new transaction to not be rolled back by others.</description>
+			<method>
+				<ejb-name>Ejb2Account</ejb-name>
+				<method-name>ejbCreate</method-name>
+				<method-params>
+					<method-param>long</method-param>
+					<method-param>long</method-param>
+				</method-params>
+			</method>
+			<trans-attribute>RequiredNew</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<description>All business methods from EJB Accound should be ACID.</description>
+			<method>
+				<ejb-name>Ejb2Account</ejb-name>
+				<method-intf>Remote</method-intf>
+				<method-name>*</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<!-- Deposit Process -->
+		<container-transaction>
+            <method>
+                <ejb-name>Ejb2DepositProcess</ejb-name>
+                <method-name>onMessage</method-name>
+                <method-params>
+                    <method-param>javax.jms.Message</method-param>
+                </method-params>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>
+	</assembly-descriptor>
+</ejb-jar>
