@@ -2,10 +2,13 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+<<<<<<< HEAD
 */.gitignore
 */.classpath
 */.project
 */.settings
+=======
+>>>>>>> 32a1f6a7824777bddded6855f69a794ea9d817da
 
 # Package Files #
 *.jar

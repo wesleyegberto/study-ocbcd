@@ -33,4 +33,7 @@ Books:
 >
 * Head First EJB;
 * Beginning Java EE 6 Platafom with Glassfish 4
+<<<<<<< HEAD
 
+=======
+>>>>>>> 32a1f6a7824777bddded6855f69a794ea9d817da
