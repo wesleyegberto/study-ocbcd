@@ -7,7 +7,8 @@
 	
 	<!-- RESTEasy for JBoss -->
 	
-	<!-- Auto scan REST service - will find and register automatically -->
+	<!-- Auto scan REST service - will find and register automatically - or instand
+	we can also create a classe that extends java.ws.rs.core.Application and add the classes -->
 	<context-param>
 		<param-name>resteasy.scan</param-name>
 		<param-value>true</param-value>
