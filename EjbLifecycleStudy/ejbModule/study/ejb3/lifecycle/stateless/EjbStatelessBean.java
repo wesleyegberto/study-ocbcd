@@ -32,6 +32,7 @@ import javax.ejb.Stateless;
  */
 @Stateless
 @LocalBean
+// @TransactionAttribute(TransactionAttributeType.REQUIRED) is default
 // if the EjbStatelessRemote wasn't annotated with @Remote we could do this
 // @Remote(EjbStatelessRemote.class)
 public class EjbStatelessBean implements EjbStatelessRemote {
