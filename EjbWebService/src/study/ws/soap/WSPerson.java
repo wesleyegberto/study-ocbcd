@@ -8,6 +8,8 @@ import javax.jws.WebService;
 import study.business.Person;
 
 /**
+ * We use JAX-WS to create Web Service SOAP.
+ * 
  * The @WebService annotation marks a Java class or interface as being a web
  * service. If used directly on the class, the annotation processor of the
  * container will generate the interface. Mark a classe with a @WebService
@@ -25,6 +27,8 @@ import study.business.Person;
  * wsimport will generate all artifacts needed to consume a WS. We can also tell
  * to Maven does that.
  * wsgem will read a WS Endpoint and generate the WSDL.
+ * 
+ * We can have @PostContruct and @PreDestroy.
  */
 @WebService(name = "PersonService", serviceName = "PersonService", portName = "RegisterPerson")
 public class WSPerson {

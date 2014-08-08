@@ -17,7 +17,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * marshalled/unmarshalled, without the annotation the JAXB will throw an
  * exception. It also define the Person is the root element of the XML.
  */
-@XmlRootElement(name = "Person") // setting the name fixe the error of unexpected element
+@XmlRootElement(name = "Person")
+// setting the name fixe the error of unexpected element
 @Entity
 @Table(name = "PERSON")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -36,6 +37,16 @@ public class Person implements Serializable {
 	@XmlElement(required = true)
 	@Column(nullable = false)
 	private int age;
+
+	public Person() {
+	}
+
+	public Person(int id, String name, int age) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.age = age;
+	}
 
 	public int getId() {
 		return id;

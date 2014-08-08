@@ -8,10 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import study.ws.soap.client.Person;
-import study.ws.soap.client.PersonService_PortType;
-import study.ws.soap.client.PersonService_ServiceLocator;
-
 @WebServlet(name = "WSPersonSoapTest", urlPatterns = { "/WsPersonSoapTest" })
 public class WSPersonSoapTest extends HttpServlet {
 	private static final long serialVersionUID = -5062615159911779302L;
@@ -19,7 +15,7 @@ public class WSPersonSoapTest extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		PersonService_ServiceLocator locator = new PersonService_ServiceLocator();
+		/*PersonService_ServiceLocator locator = new PersonService_ServiceLocator();
 		
 		Person person = new Person();
 		person.setID(171);
@@ -31,7 +27,7 @@ public class WSPersonSoapTest extends HttpServlet {
 			System.out.println("Result: " + registerPerson.registerPerson(person));
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 }
