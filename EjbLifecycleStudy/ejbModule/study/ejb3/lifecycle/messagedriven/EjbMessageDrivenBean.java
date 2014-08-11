@@ -41,7 +41,8 @@ import javax.jms.MessageListener;
 @MessageDriven(
 	mappedName = "jms/MyMDB",
 	activationConfig = {
-		@ActivationConfigProperty(propertyName = "destinationType ", propertyValue = "TOPIC"),
+		@ActivationConfigProperty(propertyName = "destinationType ", propertyValue = "javax.jms.Queue"),
+		@ActivationConfigProperty(propertyName = "destination", propertyValue = "/queue/QueueDev"),
 		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
 		@ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "PRIORITY < 4")
 	}
