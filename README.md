@@ -26,6 +26,9 @@ Projects to study the implementation, lifecycle and capabilities of EJB 2.x and 
 * JpaStudy;
 * EjbInterfaceClientStudy.
 
+
+The project Bank can show us a bit of the difference in development between EJB 2 and 3.
+
 The other projects are examples with EJB.
 
 
