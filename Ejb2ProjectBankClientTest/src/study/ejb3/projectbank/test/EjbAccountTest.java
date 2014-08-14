@@ -1,11 +1,11 @@
-package study.projectbank.test;
+package study.ejb3.projectbank.test;
 
 import java.rmi.RemoteException;
 
+import study.ejb2.projectbank.pattern.ServiceLocator;
 import study.projectbank.account.AccountException;
 import study.projectbank.account.ejb.AccountFacade;
 import study.projectbank.account.ejb.AccountFacadeHome;
-import study.projectbank.pattern.ServiceLocator;
 
 public class EjbAccountTest {
 	public static void main(String[] args) {

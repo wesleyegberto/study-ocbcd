@@ -1,10 +1,10 @@
-package study.projectbank.test;
+package study.ejb3.projectbank.test;
 
 import java.rmi.RemoteException;
 
+import study.ejb2.projectbank.pattern.ServiceLocator;
 import study.projectbank.agency.ejb.AgencyFacade;
 import study.projectbank.agency.ejb.AgencyFacadeHome;
-import study.projectbank.pattern.ServiceLocator;
 
 public class EjbAgencyTest {
 	public static void main(String[] args) {

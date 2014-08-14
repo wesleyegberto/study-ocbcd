@@ -1,4 +1,4 @@
-package study.projectbank.pattern;
+package study.ejb2.projectbank.pattern;
 
 import java.util.Hashtable;
 
