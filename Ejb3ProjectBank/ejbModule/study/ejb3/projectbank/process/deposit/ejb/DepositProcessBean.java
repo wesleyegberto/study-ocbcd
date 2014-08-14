@@ -22,7 +22,7 @@ import study.ejb3.projectbank.process.deposit.DepositTransaction;
 	mappedName = "",
 	activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType ", propertyValue = "javax.jms.Queue"),
-		@ActivationConfigProperty(propertyName = "destination", propertyValue = "/queue/QueueDev"),
+		@ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/queue/queueDev"),
 		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")
 	}
 )
@@ -30,7 +30,7 @@ public class DepositProcessBean implements MessageListener {
 	@Resource
 	private MessageDrivenContext ctx;
 	
-	@PersistenceContext
+	@PersistenceContext(unitName = "BANK_DB_UNIT")
 	private EntityManager em;
 
 	@PreDestroy

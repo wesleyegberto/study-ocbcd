@@ -46,7 +46,7 @@ public class EMMethodsTest {
 		// flushing the persistent context to the database
 		et.begin();
 		item.setPicture("head-first-ejb-cover.png");
-		em.persist(item);
+		em.merge(item);
 		System.out.println("Updated in first-level cache");
 		em.flush(); // will force to flush the persistent context
 		System.out.println("Flushed to database");

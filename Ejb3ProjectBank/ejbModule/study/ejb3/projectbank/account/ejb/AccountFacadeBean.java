@@ -26,12 +26,12 @@ public class AccountFacadeBean implements AccountFacade {
 	
 	@Resource
 	private SessionContext ctx;
-	@PersistenceContext
+	@PersistenceContext(unitName = "BANK_DB_UNIT")
 	private EntityManager em;
 	
-	@Resource(lookup = "queue/QueueFactory")
+	@Resource(lookup = "java:/ConnectionFactory")
 	private QueueConnectionFactory queueFactory;
-	@Resource(lookup = "queue/QueueDev")
+	@Resource(lookup = "java:/queue/queueDev")
 	private Queue queue;
 	
 	// we could use Entity Bean but is obsolete, so we can make this bean a
@@ -91,7 +91,7 @@ public class AccountFacadeBean implements AccountFacade {
 
 		// update the balance
 		System.out.println("Updating the balance");
-		em.persist(account);
+		em.merge(account);
 		
 		// create and register log of withdraw
 		Withdraw wd = new Withdraw(account.getAgencyNumber(), account.getAccountNumber(), amount);
@@ -122,7 +122,7 @@ public class AccountFacadeBean implements AccountFacade {
 			sender.sendObject(deposit);
 		} catch(Exception e) {
 			e.printStackTrace();
-			//ctx.setRollbackOnly();
+			ctx.setRollbackOnly();
 			throw new AccountException("Error at deposit");
 		} finally {
 			if(sender != null) {

@@ -15,8 +15,8 @@ import javax.persistence.Table;
 @Table(name = "AGENCY")
 @Access(AccessType.FIELD)
 @NamedNativeQueries({
-	@NamedNativeQuery(name = Agency.GET_ALL, query = "select ag from AGENCY ag"),
-	@NamedNativeQuery(name = Agency.FIND_AGENCY, query = "select ag from AGENCY ag where ag.AGENCY_NUMBER = ?1")
+	@NamedNativeQuery(name = Agency.GET_ALL, query = "select AGENCY_NUMBER, ADDRESS from AGENCY ag", resultClass = Agency.class),
+	@NamedNativeQuery(name = Agency.FIND_AGENCY, query = "select AGENCY_NUMBER, ADDRESS from AGENCY ag where ag.AGENCY_NUMBER = ?1", resultClass = Agency.class)
 })
 public class Agency implements Serializable {
 	private static final long serialVersionUID = 6949501675445181129L;
@@ -29,6 +29,9 @@ public class Agency implements Serializable {
 
 	public static final String GET_ALL = "Agency.getAll";
 	public static final String FIND_AGENCY = "Agency.findAgency";
+	
+	public Agency() {
+	}
 	
 	public Agency(long agencyNumber, String address) {
 		this.agencyNumber = agencyNumber;
