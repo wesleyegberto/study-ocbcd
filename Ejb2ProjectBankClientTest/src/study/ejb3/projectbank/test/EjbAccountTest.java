@@ -21,7 +21,6 @@ public class EjbAccountTest {
 			account.withdraw(26.01);
 			System.out.println("New balance: " + account.getBalance());
 			
-			
 			// deposit
 			System.out.println("Depositing 68.01");
 			account.deposit(68.01, "Thomas Anderson");

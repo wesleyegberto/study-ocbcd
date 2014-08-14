@@ -1,7 +1,10 @@
 package study.ejb3.projectbank.interceptors;
 
+import javax.ejb.EJB;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
+
+import study.ejb3.projectbank.logger.AsyncLogger;
 
 /**
  * Interceptor of AgencyFacadeBean to log the creation of a new account.
@@ -9,6 +12,10 @@ import javax.interceptor.InvocationContext;
  * and done.
  */
 public class AgencyLogger {
+
+	@EJB
+	private AsyncLogger logger;
+	
 	@AroundInvoke
 	public Object interceptorMethod(InvocationContext ic) throws Exception {
 		System.out.println("\n==================");
@@ -18,6 +25,10 @@ public class AgencyLogger {
 			System.out.print(obj + " ");
 		}
 		System.out.println("\nInitializing");
+		
+		// just call anothe logger to show the asynchronous call
+		logger.logInfo("Creating an Account.");
+		
 		try {
 			Object proceed = ic.proceed();
 			System.out.println("Result: " + proceed);
