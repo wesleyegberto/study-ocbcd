@@ -51,3 +51,5 @@ INSERT INTO ACCOUNT VALUES(299012,5365854,'Wesley Egberto', 1000.0);
 select * from AGENCY;
 
 select * from ACCOUNT;
+
+select * from WITHDRAW;

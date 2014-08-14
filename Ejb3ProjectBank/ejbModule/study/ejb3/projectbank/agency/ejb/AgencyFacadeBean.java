@@ -6,6 +6,7 @@ import javax.ejb.PrePassivate;
 import javax.ejb.Remove;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -13,6 +14,7 @@ import javax.persistence.Query;
 import study.ejb3.projectbank.account.Account;
 import study.ejb3.projectbank.agency.Agency;
 import study.ejb3.projectbank.agency.AgencyException;
+import study.ejb3.projectbank.interceptors.AgencyLogger;
 
 @Stateful
 public class AgencyFacadeBean implements AgencyFacade {
@@ -46,6 +48,7 @@ public class AgencyFacadeBean implements AgencyFacade {
 		this.ctx  = null;
 	}
 
+	@Interceptors(AgencyLogger.class)
 	public void createAccount(String name, double balance) throws AgencyException {
 		if(name == null || name.length() < 5) {
 			throw new AgencyException("Invalid name.");

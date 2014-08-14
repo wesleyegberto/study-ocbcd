@@ -57,6 +57,8 @@ public class AccountFacadeBean implements AccountFacade {
 	public void remove() {
 		this.account = null;
 		this.em = null;
+		this.queue = null;
+		this.queueFactory = null;
 		this.ctx  = null;
 	}
 

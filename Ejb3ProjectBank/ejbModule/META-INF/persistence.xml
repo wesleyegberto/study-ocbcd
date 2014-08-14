@@ -12,7 +12,7 @@
 
 		<jta-data-source>java:/jdbc/BankDB</jta-data-source>
 		<properties>
-			<!-- JTA doesn't need to setup the connection properties, the Container will provider 
+			<!-- JTA doesn't need to setup the connection properties, the Container will provide
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/BANK_DB" />
 			<property name="javax.persistence.jdbc.user" value="root" />
