@@ -7,17 +7,17 @@ import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "ACCOUNT")
 @Access(AccessType.FIELD)
 // resultClass to fix the "Pure native scalar queries are not yet supported" error
-@NamedNativeQueries({
-	@NamedNativeQuery(name = Account.GET_ALL, query = "select AGENCY_NUMBER,ACCOUNT_NUMBER,NAME,BALANCE from ACCOUNT ac", resultClass = Account.class),
-	@NamedNativeQuery(name = Account.FIND_ACCOUNT, query = "select AGENCY_NUMBER,ACCOUNT_NUMBER,NAME,BALANCE from ACCOUNT ac where ac.AGENCY_NUMBER = ?1 and ACCOUNT_NUMBER = ?2", resultClass = Account.class)
+@NamedQueries({
+	@NamedQuery(name = Account.GET_ALL, query = "select ac from Account ac"),
+	@NamedQuery(name = Account.FIND_ACCOUNT, query = "select ac from Account ac where ac.agencyNumber = ?1 and ac.accountNumber = ?2")
 })
 public class Account implements Serializable {
 	private static final long serialVersionUID = -8848403439586665662L;
