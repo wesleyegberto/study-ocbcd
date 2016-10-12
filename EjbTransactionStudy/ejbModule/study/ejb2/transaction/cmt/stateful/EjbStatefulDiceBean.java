@@ -99,7 +99,7 @@ public class EjbStatefulDiceBean implements SessionBean, SessionSynchronization 
 	 * @see javax.ejb.SessionSynchronization#beforeCompletion()
 	 */
 	public void beforeCompletion() {
-		
+		System.out.println("About to end the transaction");
 	}
 	
 	/**
@@ -109,6 +109,6 @@ public class EjbStatefulDiceBean implements SessionBean, SessionSynchronization 
 	 * @see javax.ejb.SessionSynchronization#afterCompletion(boolean)
 	 */
 	public void afterCompletion(boolean committed) {
-		System.out.println("About to end the transaction");
+		System.out.println("Was committed? " + committed);
 	}
 }
